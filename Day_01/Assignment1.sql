@@ -281,6 +281,9 @@ insert into EMPLOYEES values(100,'Steven','King','SKING','515.123.4567','1987-06
 (205,'Shelley','Higgins','SHIGGINS','515.123.8080','1994-06-07','AC_MGR',12000,NULL,101,110),
 (206,'William','Gietz','WGIETZ','515.123.8181','1994-06-07','AC_ACCOUNT',8300,NULL,205,110);
 
+-- INSERTING FOREIGN KEY CONSTRAINT TO DEPARTMENTS TABLE --
+alter table DEPARTMENTS add foreign key(manager_id) references EMPLOYEES(employee_id);
+
 -- JOB_HISTORY TABLE --
 create table JOB_HISTORY(
 employee_id int,
