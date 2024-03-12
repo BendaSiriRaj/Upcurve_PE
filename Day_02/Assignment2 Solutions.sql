@@ -376,3 +376,52 @@ from EMPLOYEES
 where job_id not in(select job_id from JOBS where job_title="Programmer")
 group by job_id;
 
+-- 65. QUERY TO GET THE TOTAL SALARY, MAXIMUM, MINIMUM, AVERAGE SALARY OF EMPLOYEES JOB_ID WISE--
+-- FOR DEPARTMENT_ID 90 ONLY --
+select sum(salary) as "Total Salary", max(salary) as "Maximum Salary", 
+min(salary) as "Minimum Salary", avg(salary) as "Average Salary"
+from EMPLOYEES
+where department_id = 90
+group by job_id;
+
+-- 66. QUERY TO GET JOB_ID, MAXIMUM SALARY FOR EMPLOYEES WHERE MAXIMUM SALARY >= 4000. --
+select job_id, max(salary)
+from EMPLOYEES 
+group by job_id
+having max(salary) >= 4000;
+
+-- 67. QUERY TO GET THE AVERAGE SALARY FOR ALL DEPARTMENTS EMPLOYING MORE THAN 10 EMPLOYEES.--
+select  department_id, avg(salary) as "Average Salary", count(*)
+from EMPLOYEES
+group by department_id
+having count(*)>10;
+
+-- 68. QUERY TO GET THE NAME, SALARY OF EMPLOYEES HAVING SALARY GREATER THAN EMPLOYEE WITH LASTNAME = "Bull". --
+select concat_ws(' ',first_name, last_name) as "Name", salary
+from EMPLOYEES
+where salary > (select salary from EMPLOYEES where last_name="Bull");
+
+-- 69. QUERY TO FIND NAME OF EMPLOYEES WORKING IN IT DEPARTMENT. --
+select concat_ws(' ',first_name,last_name) as "Name"
+from EMPLOYEES 
+where department_id in (select department_id from DEPARTMENTS where department_name = "IT");
+
+-- 70. QUERY TO FIND THE NAME OF EMPLOYEES WHO HAVE A MANAGER AND WORKED IN A USA BASED DEPARTMENT. --
+select concat_ws(' ',first_name, last_name) as "Name" 
+from EMPLOYEES
+where manager_id is not null
+and department_id in (select department_id from DEPARTMENTS 
+where location_id in (select location_id from LOCATIONS 
+where country_id = 'US'));
+
+-- 71. QUERY TO FIND NAME OF THE EMPLOYEES WHO ARE MANAGERS. --
+select concat_ws(' ',first_name,last_name) as "Name"
+from EMPLOYEES 
+where employee_id in (select manager_id 
+from EMPLOYEES 
+where manager_id is not null);
+
+-- 72. QUERY FIND THE NAME, SALARY OF EMPLOYEES WHOSE SALARY IS GREATER THAN AVERAGE SALARY.--
+select concat_ws(' ',first_namee, last_name) as "Name", salary
+from EMPLOYEES
+where salary > (select avg(salary) from EMPLOYEES);
