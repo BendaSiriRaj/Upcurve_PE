@@ -425,3 +425,172 @@ where manager_id is not null);
 select concat_ws(' ',first_namee, last_name) as "Name", salary
 from EMPLOYEES
 where salary > (select avg(salary) from EMPLOYEES);
+
+-- 73. QUERY TO FIND NAME, SALARY OF EMPLOYEES WHOSE SALARY IS EQUAL TO MINIMUM SALARY OF THEIR JOB GRADES. --
+select concat_ws(' ',first_name,last_name) as "Name", salary
+from EMPLOYEES as emp
+where emp.salary = (select min_salary 
+from JOBS as jb 
+where emp.job_id = jb.job_id);
+
+-- 74. QUERY TO FIND NAME, SALARY OF EMPLOYEES WHO EARNS SALARY MORE THAN THE AVERAGE --
+-- AND WORKS IN IT DEPARTMENT. --
+select concat_ws(' ',first_name, last_name) as "Name", salary
+from EMPLOYEES 
+where salary > (select avg(salary)
+from EMPLOYEES)
+and department_id in (select department_id 
+from DEPARTMENTS 
+where department_name like "IT%");
+
+-- 75. QUERY TO FIND NAME, SALARY OF EMPLOYEES WHO EARN MORE THAN THE EARNINGS OF Mr.Bell --
+select concat_ws(' ',first_name, last_name) as "Name", salary
+from EMPLOYEES 
+where salary > (select salary
+from EMPLOYEES where last_name = "Bell")
+order by first_name;
+
+-- 76. QUERY TO FIND NAME, SALARY OF EMPLOYEES WHO EARN SAME SALARY AS THE MINIMUM SALARY OF ALL DEPARTMENTS --
+select concat_ws(' ',first_name, last_name) as "Name", salary
+from EMPLOYEES 
+where salary = (select min(salary)
+from EMPLOYEES);
+
+-- 77. QUERY TO FIND NAME, SALARY OF EMPLOYEES WHOSE SALARY > AVERAGE SALARY OF ALL DEPARTMENTS. --
+select concat_ws(' ',first_name, last_name) as "Name", salary
+from EMPLOYEES 
+where salary > (select avg(salary)
+from EMPLOYEES)
+order by first_name;
+
+-- 78. QUERY TO FIND NAME, SALARY OF EMPLOYEES WHOSE SALARY IS HIGHER THAN SALARY OF ALL SHIPPING_CLERKS. --
+-- SORT THE RESULTS FROM LOWEST TO HIGHEST. --
+select concat_ws(' ',first_name, last_name) as "Name", salary
+from EMPLOYEES 
+where salary > (select max(salary) 
+from EMPLOYEES 
+where job_id='SH_CLERK')
+order by salary;
+
+-- 79. QUERY TO FIND NAME OF EMPLOYEES WHO ARE NOT SUPERVISORS. --
+select concat_ws(' ',first_name,last_name) as "Name"
+from EMPLOYEES
+where employee_id not in
+(select manager_id from EMPLOYEES where manager_id is not null)
+order by first_name ;	
+
+-- 80. QUERY TO DISPLAY THE EMPLOYEE_ID, FIRSTNAME, LASTNAMEM AND DEPARTMENT NAMES OF ALL EMPLOYEES. --
+select emp.employee_id, emp.first_name, emp.last_name, dept.department_name
+from EMPLOYEES as emp
+join DEPARTMENTS as dept
+on emp.department_id = dept.department_id
+order by employee_id;
+
+-- 81. QUERY TO DISPLAY EMPLOYEEID, FIRSTNAME, LASTNAME, SALARY OF ALL EMPLOYEES --
+-- WHOSE SALARY IS ABOVE THE AVERAGE OF THEIR DEPARTMENTS. --
+select employee_id, first_name, last_name, salary
+from EMPLOYEES as emp
+where salary > (select avg(salary) from EMPLOYEES
+where department_id = emp.department_id);
+
+-- 82. QUERY TO FETCH EVEN NUMBERED RECORDS FROM EMPLOYEES TABLE. --
+set @i = 0;
+select i, employee_id
+from (select @i := @i + 1 as i, employee_id from EMPLOYEES) a
+where mod(a.i,2)=0;
+
+-- 83. QUERY TO FIND THE 5TH MAXIMUM SALARY IN THE EMPLOYEES TABLE. --
+select distinct salary
+from EMPLOYEES as emp
+where 5 =
+(select count(distinct salary) 
+from EMPLOYEES as empl
+where empl.salary >= emp.salary);
+
+-- 84. QUERY TO FIND THE 4 TH MINIMUM SALARY IN THE EMPLOYEES TABLE. --
+select distinct salary
+from EMPLOYEES as emp
+where 4 = 
+(select count(distinct salary)
+from EMPLOYEES as empl
+where empl.salary <= emp.salary);
+
+-- 85. QUERY TO SELECT LAST 10 RECORDS FROM A TABLE. --
+select * from 
+( select * from EMPLOYEES 
+order by employee_id desc limit 10) sub
+order by employee_id asc;
+
+-- 86. QUERY TO LIST THE DEPARTMENTID, NAME OF ALL DEPARTMENTS WHERE NO EMPLOYEE IS WORKING. --
+select department_id, department_name 
+from DEPARTMENTS 
+where department_id not in
+(select distinct department_id
+from EMPLOYEES);
+
+-- 87. QUERY TO GET THREE MAXIMUM SALARIES. --
+select distinct salary
+from EMPLOYEES as emp
+where 3 >=
+(select count(distinct salary)
+from employees as empl
+where empl.salary >= emp.salary)
+order by emp.salary desc;
+
+-- 88. QUERY TO GET THREE MINIMUM SALARIES. --
+select distinct salary
+from EMPLOYEES as emp
+where 3>= 
+(select count(distinct salary)
+from employees as empl
+where empl.salary <= emp.salary)
+order by emp.salary asc;
+
+-- 89. QUERY TO GET THE NTH MAXIMUM SALARIES OF EMPLOYEES. --
+set @n=5;
+select distinct salary
+from EMPLOYEES as emp
+where @n >= 
+(select count(distinct salary) 
+from EMPLOYEES as empl
+where empl.salary >= emp.salary)
+order by emp.salary desc;
+
+-- 90. QUERY TO FIND ADDRESSES (Location_id, street_address, city, state_province, country_name) OF ALL THE DEPARTMENTS. --
+select lct.location_id, lct.street_address, lct.city, lct.state_province, lct.country_id
+from LOCATIONS as lct
+join DEPARTMENTS as dept
+on lct.location_id = dept.location_id;
+
+-- 91. QUERY TO FIND THE NAMES, DEPARTMENTID, AND DEPARTMENT NAME OF ALL THE EMPLOYEES. --
+select concat_ws(' ',emp.first_name, emp.last_name) as "Name", dept.department_id, dept.department_name
+from EMPLOYEES as emp
+join DEPARTMENTS as dept
+on emp.department_id = dept.department_id;
+
+-- 92. QUERY TO FIND NAME, JOB, DEPARTMENTID, DEPARTMENT NAME OF EMPLOYEES WORKING IN LONDON. --
+select concat_ws(' ',emp.first_name, emp.last_name) as "Name", emp.job_id, dept.department_id, dept.department_name
+from EMPLOYEES as emp
+join DEPARTMENTS as dept
+on emp.department_id = dept.department_id
+where dept.location_id in (select location_id from LOCATIONS where city = "London" );
+
+-- 93. QUERY TO FIND EMPLOYEEID, NAME ALONG WITH THEIR MANAGER_ID AND LASTNAME. --
+select emp.employee_id, concat_ws(' ',emp.first_name, emp.last_name) as "Name", emp.manager_id, mang.last_name
+from EMPLOYEES as emp
+join EMPLOYEES as mang
+where emp.manager_id = mang.employee_id;
+
+-- 94. QUERY TO FIND NAME AND HIREDATE OF EMPLOYEES WHO WERE HIRED AFTER 'Jones'. --
+select concat_ws(' ',first_name, last_name), hire_date
+from EMPLOYEES 
+where hire_date > (select hire_date from EMPLOYEES where last_name = "Jones");
+
+-- 95. QUERY TO GET DEPARTMENTNAME, NUMBER OF EMPLOYEES IN THE DEPARTMENT. --
+select distinct dept.department_name, count(emp.department_id)
+from DEPARTMENTS as dept
+join EMPLOYEES as emp
+on dept.department_id = emp.department_id
+group by emp.department_id;
+
+-- 96. QUERY TO FIND THE EMPLOYEE ID, JOB TITLE, NUMBER OF DAYS BETWEEN ENDING DATEAND STARTING DATE FOR ALL JOBS IN DEPARTMENT 90. --
