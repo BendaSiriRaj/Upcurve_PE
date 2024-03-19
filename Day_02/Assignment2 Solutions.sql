@@ -594,3 +594,17 @@ on dept.department_id = emp.department_id
 group by emp.department_id;
 
 -- 96. QUERY TO FIND THE EMPLOYEE ID, JOB TITLE, NUMBER OF DAYS BETWEEN ENDING DATEAND STARTING DATE FOR ALL JOBS IN DEPARTMENT 90. --
+select dept.employee_id, jb.job_id, (jb.end_date-jb.start_date)
+from EMPLOYEES as emp
+join JOBS AS jb
+on emp.job_id = jb.job_id
+where emp.department_id = 90;
+
+-- 97. QUERY TO FIND THE DEPARTMENT_ID, NAME AND FIRSTNAME OF MANAGER. --
+select department_id, first_name 
+from EMPLOYEES 
+where employee_id in 
+(select manager_id from EMPLOYEES where manager_id is not null);
+
+-- 98.QUERY TO DISPLAY THE DEPARTMENT NAME, MANAGER NAME AND CITY. --
+select dept.department_id, emp.
