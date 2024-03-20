@@ -594,14 +594,109 @@ on dept.department_id = emp.department_id
 group by emp.department_id;
 
 -- 96. QUERY TO FIND THE EMPLOYEE ID, JOB TITLE, NUMBER OF DAYS BETWEEN ENDING DATEAND STARTING DATE FOR ALL JOBS IN DEPARTMENT 90. --
-select dept.employee_id, jb.job_id, (jb.end_date-jb.start_date)
-from EMPLOYEES as emp
-join JOBS AS jb
-on emp.job_id = jb.job_id
-where emp.department_id = 90;
+select jbh.employee_id, jb.job_title , (jbh.end_date-jbh.start_date)
+from JOB_HISTORY AS jbh
+join JOBS as jb
+on jbh.job_id = jb.job_id
+where jbh.department_id = 90;
 
--- 97. QUERY TO FIND THE DEPARTMENT_ID, NAME AND FIRSTNAME OF MANAGER. --
+-- 97. QUERY TO FIND THE DEPARTMENT_ID, NAME AND FIRSTNAME OF MANAGER.--
 select department_id, first_name 
 from EMPLOYEES 
 where employee_id in 
 (select manager_id from EMPLOYEES where manager_id is not null);
+
+-- 98. QUERY TO DISPLAY THE DEPARTMENT NAME, MANAGER NAME AND CITY. --
+select distinct dept.department_name, concat_ws(' ',mg.first_name,mg.last_name) as 'manager_name', lct.city
+from EMPLOYEES as emp
+join EMPLOYEES as mg
+on emp.manager_id = mg.employee_id
+join DEPARTMENTS as dept
+on emp.department_id = dept.department_id
+join LOCATIONS as lct
+on dept.location_id = lct.location_id;
+
+-- 99. QUERY TO DISPLAY THE JOB TITLE AND AVERAGE SALARY OF EMPLOYEES.--
+select jb.job_title, avg(emp.salary) as "Average Salary"
+from EMPLOYEES as emp
+join JOBS as jb
+on emp.job_id = jb.job_id
+group by emp.job_id;
+
+-- 100. QUERY TO DISPLAY JOB TITLE, EMPLOYEE NAME, AND THE DIFFERENCE BETWEEN SALARY OF THE EMPLOYEE AND MINIMUM SALARY FOR THE JOB. --
+select jb.job_title, concat_ws(' ', first_name, last_name) as "EmployeeName", 
+(emp.salary - (select min(emp1.salary) from EMPLOYEES as emp1 where emp1.job_id = emp.job_id group by emp1.job_id)) as "difference"
+from EMPLOYEES as emp
+join JOBS as jb
+on emp.job_id = jb.job_id;
+
+-- 101. QUERY TO DISPLAY THE JOB HISTORY THAT WERE DONE BY ANY EMPLOYEE --
+-- WHO IS CURRENTLY DRAWING MORE THAN 10000 OF SALARY --
+select * 
+from JOB_HISTORY 
+where employee_id in
+(select employee_id from EMPLOYEES where salary > 10000);
+
+-- 102.QUERY TO DISPLAY DEPARTMENT NAME, NAME (FIRST_NAME, LAST_NAME), HIRE DATE,SALARY OF THE MANAGER FOR ALL MANAGERS --
+-- WHOSE EXPERIENCE IS MORE THAN 15 YEARS. --
+select dept.department_name, concat_ws(' ',emp.first_name, emp.last_name) as "employee_name", emp.hire_date, emp.salary
+from EMPLOYEES as emp
+join DEPARTMENTS as dept
+on emp.department_id = dept.department_id
+where employee_id in (select distinct manager_id from EMPLOYEES where manager_id is not null)
+and (DATEDIFF(now(), emp.hire_date))/365>15;
+
+-- 103. QUERY TO GET THE FIRST NAME AND HIRE DATE FROM EMPLOYEES TABLE WHERE HIREDATE BETWEEN 1987-06-01 AND 1987-07-30. --
+select first_name, hire_date
+from EMPLOYEES 
+where hire_date between '1987-06-01' and '1987-07-30';
+
+-- 104. QUERY TO GET THE FIRSTNAME, LASTNAME WHO JOINED IN THE MONTH OF JUNE.--
+select first_name, last_name
+from EMPLOYEES 
+where month(hire_date) = 6;
+
+-- 105. QUERY TO GET THE YEARS IN WHICH MORE THAN 10 EMPLOYEES JOINED. --
+select date_format(hire_date, '%Y')
+from EMPLOYEES 
+group by date_format(hire_date, '%Y')
+having count(employee_id) > 10;
+
+-- 106. QUERY TO GET FIRST NAME OF EMPLOYEES WHO JOINED IN 1987. --
+select first_name 
+from EMPLOYEES 
+where year(hire_date) = 1987;
+
+-- 107. QUERY TO GET DEPARTMENT NAME, MANAGER NAME, AND SALARY OF THE MANAGERFOR ALL MANAGERS --
+-- WHOSE EXPERIENCE IS MORE THAN 5 YEARS. --
+select dept.department_name, concat_ws(' ',emp.first_name, emp.last_name) as "manager_name", emp.salary
+from EMPLOYEES as emp
+join DEPARTMENTS as dept
+on emp.department_id = dept.department_id
+where employee_id in (select distinct manager_id from EMPLOYEES where manager_id is not null)
+and (DATEDIFF(now(), emp.hire_date))/365>5;
+
+-- 108. QUERY TO GET EMPLOYEE ID, LAST NAME, AND DATE OF FIRST SALARY OF THE EMPLOYEES. --
+select employee_id, last_name, last_day(hire_date) as "first_salary_date"
+from EMPLOYEES;
+
+-- 109. query to get first name, hire date and experience of the employees. --
+select first_name, hire_date, round(DATEDIFF(now(), hire_date)/365) as 'experience'
+from EMPLOYEES ;
+
+-- 110. QUERY TO GET THE DEPARTMENT ID, YEAR, AND NUMBER OF EMPLOYEES JOINED. --
+select department_id, year(hire_date) as 'year', count(employee_id)
+from EMPLOYEES
+group by department_id, year(hire_date)
+order by department_id;
+
+-- 111. QUERY TO GET THE JOB_ID AND RELATED EMPLOYEES ID. --
+select job_id, group_concat(employee_id, ' ') as 'employee_id' 
+from EMPLOYEES
+group by job_id;
+
+-- 112. QUERY TO UPDATE THE PORTION OF THE PHONE_NUMBER IN THE EMPLOYEES TABLE --
+-- WITHIN THE PHONE NUMBER THE SUBSTRING '124' WILL BE REPLACED BY '999'. --
+update EMPLOYEES
+set phone_number = replace(phone_number, '124', '999')
+where phone_number like '%124%' ;
