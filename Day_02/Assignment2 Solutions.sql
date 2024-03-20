@@ -605,6 +605,3 @@ select department_id, first_name
 from EMPLOYEES 
 where employee_id in 
 (select manager_id from EMPLOYEES where manager_id is not null);
-
--- 98.QUERY TO DISPLAY THE DEPARTMENT NAME, MANAGER NAME AND CITY. --
-select dept.department_id, emp.
