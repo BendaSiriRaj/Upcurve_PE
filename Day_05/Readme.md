@@ -1,6 +1,7 @@
 # DAY 05 <br />
 <br />
 <br />
+
 ## Topics<br />
 Session 5: Object-Oriented Programming (OOP) in Java<br />
 Principles of OOP: encapsulation, inheritance, polymorphism, and abstraction<br />
@@ -10,6 +11,7 @@ Inheritance and method overriding<br />
 Introduction to access modifiers<br />
 <br />
 <br />
+
 ## Assignment status<br />
 Assignment Assigned<br />
 <br />
