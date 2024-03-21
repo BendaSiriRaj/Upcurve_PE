@@ -700,3 +700,87 @@ group by job_id;
 update EMPLOYEES
 set phone_number = replace(phone_number, '124', '999')
 where phone_number like '%124%' ;
+
+-- 113. QUERY TO GET THE DETAILS OF THE EMPLOYEES WHERE THE LENGTH OF THE FIRST NAME GREATER THAN OR EQUAL TO 8. --
+select *
+from EMPLOYEES 
+where length(first_name) >= 8;
+
+-- 114. QUERY TO DISPLAY LEADING ZEROS BEFORE MAXIMUM AND MINIMUM SALARY. --
+select lpad(max(salary), 7, 0) as "maximum_salary", lpad(min(salary), 7, 0) as "minimum_salary"
+from EMPLOYEES;
+
+-- 115. QUERY TO APPEND '@example.com' TO EMAIL FIELD. --
+select concat(email, '@example.com') as "email_address"
+from EMPLOYEES;
+
+-- 116. QUERY TO GET THE EMPLOYEE ID, FIRST NAME AND HIRE MONTH. --
+select employee_id, first_name, month(hire_date) as "hire_month"
+from EMPLOYEES;
+
+-- 117. QUERY TO GET THE EMPLOYEE ID, EMAIL ID (DISCARD THE LAST THREE CHARACTERS). --
+select employee_id, reverse(substr(reverse(email),4)) as "email_id"
+from EMPLOYEES;
+
+-- 118. QUERY TO FIND ALL EMPLOYEES WHERE FIRST NAMES ARE IN UPPER CASE. --
+select * 
+from EMPLOYEES 
+where first_name = binary upper(first_name);
+
+-- 119. QUERY TO EXTRACT THE LAST 4 CHARACTER OF PHONE NUMBERS. --
+select right(phone_number, 4) as "phone_number"
+from EMPLOYEES;
+
+-- 120. QUERY TO GET THE LAST WORD OF THE STREET ADDRESS. --
+select substring_index(replace(replace(replace(street_address,',',' '),')',' '),'(',' '),' ',-1)
+as "street_address_last_word"
+from LOCATIONS;
+
+-- 121. QUERY TO GET THE LOCATIONS THAT HAVE MINIMUM STREET LENGTH. --
+select *
+from LOCATIONS
+where length(street_address) <= (select min(length(street_address))
+from LOCATIONS);
+
+-- 122. QUERY TO DISPLAY THE FIRST WORD FROM THOSE JOB TITLES WHICH CONTAINS MORE THANONE WORDS. --
+select substr(job_title, 1, instr(job_title, ' ') -1)
+from JOBS;
+
+-- 123. QUERY TO DISPLAY THE LENGTH OF FIRST NAME FOR EMPLOYEES --
+-- WHERE LAST NAME CONTAIN CHARACTER 'C' AFTER 2ND POSITION. --
+select first_name, length(first_name) as "first_name_length"
+from EMPLOYEES 
+where last_name like "__c%";
+
+-- 124. QUERY THAT DISPLAYS THE FIRST NAME AND THE LENGTH OF THE FIRST NAME FOR ALL EMPLOYEES --
+-- WHOSE NAME STARTS WITH THE LETTERS 'A', 'J' OR 'M'. --
+-- GIVE EACH COLUMN ANAPPROPRIATE LABEL. --
+-- SORT THE RESULTS BY THE EMPLOYEES' FIRST NAMES. --
+select first_name, length(first_name) as "first_name_length"
+from EMPLOYEES
+where first_name like "A%"
+or first_name like "J%"
+or first_name like "M%"
+order by first_name;
+
+-- 125. QUERY TO DISPLAY THE FIRST NAME AND SALARY FOR ALL EMPLOYEES. --
+-- FORMAT THE SALARY TO BE 10 CHARACTERS LONG, LEFT-PADDED WITH THE $ SYMBOL. -- 
+-- LABEL THE COLUMN SALARY. --
+select first_name, concat_ws(' ','$',lpad(salary, 10, 0)) as "salary"
+from EMPLOYEES;
+
+-- 126. QUERY TO DISPLAY THE FIRST EIGHT CHARACTERS OF THE EMPLOYEES' FIRST NAMES --
+ -- AND INDICATE THE AMOUNTS OF THEIR SALARIES WITH '$' SIGN. --
+-- EACH '$' SIGN SIGNIFIES A THOUSAND DOLLARS. --
+-- SORT THE DATA IN DESCENDING ORDER OF SALARY. --
+select left(first_name, 8),
+repeat('$', floor(salary/1000)) as "salary($)", salary
+from EMPLOYEES
+order by salary desc;
+
+-- 127. QUERY TO DISPLAY THE EMPLOYEES WITH THEIR CODE, FIRST NAME, LAST NAME AND HIRE DATE -- 
+-- WHO HIRED EITHER ON SEVENTH DAY OF ANY MONTH OR SEVENTH MONTH IN ANY YEAR. --
+select employee_id, first_name, last_name, hire_date
+from EMPLOYEES 
+where month(hire_date) = 7
+or day(hire_date) =7;
