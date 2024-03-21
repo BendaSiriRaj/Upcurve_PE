@@ -1,5 +1,6 @@
 ## DAY 01 <br />
 <br />
+
 # Topics <br />
 DAY 1: Introduction to Databases and SQL Basics<br />
 Understanding the role of databases in modern computing<br />
