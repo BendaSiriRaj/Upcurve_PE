@@ -1,9 +1,9 @@
 # Day_07
 <br />
 <br />
+
 ## Topics: 
-<br />
-<br />
+
 ### Exceptions Handling <br />
 Understanding exceptions and error handling <br />
 Handling exceptions using try-catch blocks <br />
