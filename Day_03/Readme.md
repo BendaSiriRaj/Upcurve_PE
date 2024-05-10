@@ -10,7 +10,7 @@ Indexing and Query Optimization Techniques<br />
 Transactions and ACID Properties<br />
 <br />
 <br />
-# Assignment Status <br />
+## Assignment Status <br />
 Assignment assigned<br />
 <br />
 <br />
