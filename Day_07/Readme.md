@@ -4,7 +4,7 @@
 
 ## Topics: 
 
-### Exceptions Handling <br />
+### Day 7: Exceptions Handling <br />
 Understanding exceptions and error handling <br />
 Handling exceptions using try-catch blocks <br />
 Multiple catch blocks and finally block <br />
