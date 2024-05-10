@@ -3,7 +3,8 @@
 <br />
 
 ## TOPICS: <br />
-Day 6: Advanced OOP Concepts <br />
+
+### Day 6: Advanced OOP Concepts <br />
 Interfaces and abstract classes <br />
 Packages and access specifiers <br />
 Composition vs. inheritance <br />
